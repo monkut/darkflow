@@ -1,0 +1,6 @@
+Cython
+numpy
+scipy
+tensorflow-gpu
+opencv-python
+
