@@ -5,13 +5,13 @@ from .misc import show
 import numpy as np
 import os
 
+
 def loss(self, net_out):
     """
     Takes net.out and placeholders value
     returned in batch() func above,
     to build train_op and loss
     """
-    # meta
     m = self.meta
     sprob = float(m['class_scale'])
     sconf = float(m['object_scale'])
@@ -41,18 +41,23 @@ def loss(self, net_out):
     _botright = tf.placeholder(tf.float32, size2 + [2])
 
     self.placeholders = {
-        'probs':_probs, 'confs':_confs, 'coord':_coord, 'proid':_proid,
-        'areas':_areas, 'upleft':_upleft, 'botright':_botright
+        'probs':_probs,
+        'confs':_confs,
+        'coord':_coord,
+        'proid':_proid,
+        'areas':_areas,
+        'upleft':_upleft,
+        'botright':_botright
     }
 
     # Extract the coordinate prediction from net.out
     coords = net_out[:, SS * (C + B):]
     coords = tf.reshape(coords, [-1, SS, B, 4])
-    wh = tf.pow(coords[:,:,:,2:4], 2) * S # unit: grid cell
-    area_pred = wh[:,:,:,0] * wh[:,:,:,1] # unit: grid cell^2
-    centers = coords[:,:,:,0:2] # [batch, SS, B, 2]
-    floor = centers - (wh * .5) # [batch, SS, B, 2]
-    ceil  = centers + (wh * .5) # [batch, SS, B, 2]
+    wh = tf.pow(coords[:,:,:,2:4], 2) * S  # unit: grid cell
+    area_pred = wh[:,:,:,0] * wh[:,:,:,1]  # unit: grid cell^2
+    centers = coords[:,:,:,0:2]  # [batch, SS, B, 2]
+    floor = centers - (wh * .5)  # [batch, SS, B, 2]
+    ceil  = centers + (wh * .5)  # [batch, SS, B, 2]
 
     # calculate the intersection areas
     intersect_upleft   = tf.maximum(floor, _upleft)

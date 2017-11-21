@@ -3,6 +3,7 @@ from . import yolov2
 from . import vanilla
 from os.path import basename
 
+
 class framework(object):
     constructor = vanilla.constructor
     loss = vanilla.train.loss
@@ -16,6 +17,7 @@ class framework(object):
 
     def is_inp(self, file_name):
         return True
+
 
 class YOLO(framework):
     constructor = yolo.constructor
@@ -31,6 +33,7 @@ class YOLO(framework):
     findboxes = yolo.predict.findboxes
     process_box = yolo.predict.process_box
 
+
 class YOLOv2(framework):
     constructor = yolo.constructor
     parse = yolo.data.parse
@@ -44,9 +47,6 @@ class YOLOv2(framework):
     findboxes = yolov2.predict.findboxes
     process_box = yolo.predict.process_box
 
-"""
-framework factory
-"""
 
 types = {
     '[detection]': YOLO,
@@ -54,6 +54,9 @@ types = {
 }
 
 def create_framework(meta, FLAGS):
+    """
+    framework factory
+    """
     net_type = meta['type']
     this = types.get(net_type, framework)
     return this(meta, FLAGS)

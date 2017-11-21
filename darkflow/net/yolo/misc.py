@@ -20,6 +20,7 @@ coco_models = ['tiny-coco', 'yolo-coco',  # <- v1.1
 coco_names = 'coco.names'
 nine_names = '9k.names'
 
+
 def labels(meta, FLAGS):    
     model = os.path.basename(meta['name'])
     if model in voc_models: 

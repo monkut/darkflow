@@ -1,11 +1,12 @@
-from ...utils.pascal_voc_clean_xml import pascal_voc_clean_xml
+import os
+import pickle
+from copy import deepcopy
 from numpy.random import permutation as perm
+import numpy as np
+from ...utils.pascal_voc_clean_xml import pascal_voc_clean_xml
 from ..yolo.predict import preprocess
 from ..yolo.data import shuffle
-from copy import deepcopy
-import pickle
-import numpy as np
-import os
+
 
 def _batch(self, chunk):
     """
@@ -65,7 +66,7 @@ def _batch(self, chunk):
     # Finalise the placeholders' values
     upleft   = np.expand_dims(prear[:,0:2], 1)
     botright = np.expand_dims(prear[:,2:4], 1)
-    wh = botright - upleft; 
+    wh = botright - upleft
     area = wh[:,:,0] * wh[:,:,1]
     upleft   = np.concatenate([upleft] * B, 1)
     botright = np.concatenate([botright] * B, 1)

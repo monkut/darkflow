@@ -6,8 +6,10 @@ import numpy as np
 import os
 import math
 
+
 def expit_tensor(x):
-	return 1. / (1. + tf.exp(-x))
+    return 1. / (1. + tf.exp(-x))
+
 
 def loss(self, net_out):
     """
@@ -15,7 +17,6 @@ def loss(self, net_out):
     returned in batch() func above,
     to build train_op and loss
     """
-    # meta
     m = self.meta
     sprob = float(m['class_scale'])
     sconf = float(m['object_scale'])
@@ -23,7 +24,7 @@ def loss(self, net_out):
     scoor = float(m['coord_scale'])
     H, W, _ = m['out_size']
     B, C = m['num'], m['classes']
-    HW = H * W # number of grid cells
+    HW = H * W  # number of grid cells
     anchors = m['anchors']
 
     print('{} loss hyper-parameters:'.format(m['model']))
@@ -40,16 +41,23 @@ def loss(self, net_out):
     _probs = tf.placeholder(tf.float32, size1)
     _confs = tf.placeholder(tf.float32, size2)
     _coord = tf.placeholder(tf.float32, size2 + [4])
+
     # weights term for L2 loss
     _proid = tf.placeholder(tf.float32, size1)
+
     # material calculating IOU
     _areas = tf.placeholder(tf.float32, size2)
     _upleft = tf.placeholder(tf.float32, size2 + [2])
     _botright = tf.placeholder(tf.float32, size2 + [2])
 
     self.placeholders = {
-        'probs':_probs, 'confs':_confs, 'coord':_coord, 'proid':_proid,
-        'areas':_areas, 'upleft':_upleft, 'botright':_botright
+        'probs':_probs,
+        'confs':_confs,
+        'coord':_coord,
+        'proid':_proid,
+        'areas':_areas,
+        'upleft':_upleft,
+        'botright':_botright
     }
 
     # Extract the coordinate prediction from net.out

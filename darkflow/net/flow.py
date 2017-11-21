@@ -1,8 +1,9 @@
 import os
 import time
+import math
+import pickle
 import numpy as np
 import tensorflow as tf
-import pickle
 from multiprocessing.pool import ThreadPool
 
 train_stats = (
@@ -13,6 +14,7 @@ train_stats = (
     '\tBackup every  : {}'
 )
 pool = ThreadPool()
+
 
 def _save_ckpt(self, step, loss_profile):
     file = '{}-{}{}'
@@ -64,13 +66,15 @@ def train(self):
 
         ckpt = (i+1) % (self.FLAGS.save // self.FLAGS.batch)
         args = [step_now, profile]
-        if not ckpt: _save_ckpt(self, *args)
+        if not ckpt:
+            _save_ckpt(self, *args)
 
-    if ckpt: _save_ckpt(self, *args)
+    if ckpt:
+        _save_ckpt(self, *args)
+
 
 def return_predict(self, im):
-    assert isinstance(im, np.ndarray), \
-				'Image is not a np.ndarray'
+    assert isinstance(im, np.ndarray), 'Image is not a np.ndarray'
     h, w, _ = im.shape
     im = self.framework.resize_input(im)
     this_inp = np.expand_dims(im, 0)
@@ -96,7 +100,6 @@ def return_predict(self, im):
         })
     return boxesInfo
 
-import math
 
 def predict(self):
     inp_path = self.FLAGS.imgdir

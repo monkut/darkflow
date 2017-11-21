@@ -2,6 +2,7 @@ from .defaults import argHandler #Import the default arguments
 import os
 from .net.build import TFNet
 
+
 def cliHandler(args):
     FLAGS = argHandler()
     FLAGS.setDefaults()
